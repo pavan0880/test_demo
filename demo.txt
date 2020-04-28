@@ -1,0 +1,44 @@
+package stevejobs;
+
+import java.time.Duration;
+import java.util.Scanner;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.locators.RelativeLocator;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+
+public class Test70 
+{
+	public static void main(String[] args) 
+	{
+		//take data from keyboard
+		Scanner sc=new Scanner(System.in);
+		System.out.println("enter a name");
+		String x=sc.nextLine();
+		//Open chrome browser
+		System.setProperty("webdriver.chrome.driver",
+                                    "E:\\batch244\\chromedriver.exe");
+		ChromeDriver driver=new ChromeDriver();
+		driver.manage().window().maximize();
+		FluentWait w=new FluentWait(driver);
+		w.pollingEvery(Duration.ofMillis(100));
+		w.withTimeout(Duration.ofSeconds(20));
+		//Launch site
+		driver.get("https://www.w3schools.com/angular/tryit.asp?filename=try_ng_example1");
+		w.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("iframeResult"));
+		driver.findElement(By.xpath("//*[@ng-model='name']")).sendKeys(x);
+		try
+		{
+			w.until(ExpectedConditions.textToBe(By.xpath("//p[contains(text(),'You wrote:')]"),"You wrote: "+x));
+			System.out.println("Test passed");
+		}
+		catch(Exception ex)
+		{
+			System.out.println("Test failed");
+		}
+		//Close site
+		driver.switchTo().defaultContent();
+		driver.close();
+		
